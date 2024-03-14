@@ -1,0 +1,28 @@
+name: lint-code-analyses
+
+on:
+  push:
+    paths: [ 'DEV-W1/**' ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./DEV-W1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./DEV-W1
+
+      - name: Run ESLint
+        run: npm run lint
+        working-directory: ./DEV-W1
+

@@ -1,0 +1,31 @@
+name: jest-code-coverage
+
+on:
+  push:
+    paths: [ 'DEV-W1/**' ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./DEV-W1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./DEV-W1
+
+      - name: Run Jest with code coverage
+        run: |
+          npm run test -- --coverage
+        working-directory: ./DEV-W1
+        env:
+          COVERAGE_THRESHOLD: 70
+       

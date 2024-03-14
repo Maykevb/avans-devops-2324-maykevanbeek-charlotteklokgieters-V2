@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  mongodb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mongo
+    restart: always
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-API
+    ports:
+      - "17000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://root:root@mongodb:27017/devops_week1
+
+networks:
+  app-network:
+
+volumes:
+  mongodb_data:
