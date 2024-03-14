@@ -13,8 +13,8 @@ components:
       build:
         context: .
         dockerfile: Dockerfile-API
-      environment:
-        MONGO_URI: 'mongodb://root:root@mongodb:27017/devops_week1'
+#      environment:
+#        MONGO_URI: 'mongodb://root:root@mongodb:27017/devops_week1'
       ports:
         - '17000:3000'
     hosts:
