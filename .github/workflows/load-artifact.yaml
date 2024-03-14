@@ -1,0 +1,89 @@
+name: Load Artifact Workflow
+on:
+  workflow_call:
+    inputs:
+      workflow_run_id:
+        required: true
+        type: string
+    outputs:
+      pr-number:
+        description: "The number of the PR"
+        value: ${{ jobs.load-artifact.outputs.pr-number }}
+      skip-deployment:
+        description: "Flag deciding whether or not deployment should be skipped or performed"
+        value: ${{ jobs.load-artifact.outputs.skip-deployment }}
+      is-pull-request-event:
+        description: "Flag containing information on whether this is a PR event or not"
+        value: ${{ jobs.load-artifact.outputs.is-pull-request-event }}
+      bunnyshell-yaml-contents:
+        description: "The bunnyshell.yaml contents"
+        value: ${{ jobs.load-artifact.outputs.bunnyshell-yaml-contents }}
+jobs:
+  load-artifact:
+    name: Load artifact values
+    runs-on: ubuntu-latest
+    outputs:
+      pr-number: ${{ env.PR_NUMBER }}
+      skip-deployment: ${{ fromJSON(env.FLAGS_JSON).skip_deployment }}
+      is-pull-request-event: ${{ fromJSON(env.EVENT_JSON).pull_request != '' }}
+      bunnyshell-yaml-contents: ${{ env.BUNNYSHELL_YAML_CONTENTS }}
+    steps:
+      - name: Download artifact
+        id: download
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: ${{ inputs.workflow_run_id }},
+              });
+              let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
+                return artifact.name == "bunnyshell";
+              })[0];
+              if (matchArtifact === undefined) {
+                throw new Error('Bunnyshell Artifact not found!');
+              }
+            
+              let download = await github.rest.actions.downloadArtifact({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                artifact_id: matchArtifact.id,
+                archive_format: 'zip',
+              });
+              fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/artifact.zip`, Buffer.from(download.data));
+            
+              console.log("Artifact successfully downloaded");
+            } catch (error) {
+              console.error(error.message);
+              fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `:x: ${error.message}\n`);
+              throw error; // Re-throw the error to fail the step
+            }
+      - name: Load artifact data
+        id: load_data
+        run: |
+          unzip artifact.zip
+          
+          echo 'EVENT_JSON<<EOFEVENTJSON' >> $GITHUB_ENV
+          cat event.json >> $GITHUB_ENV
+          echo -e '\nEOFEVENTJSON' >> $GITHUB_ENV
+          
+          echo 'FLAGS_JSON<<EOFFLAGSJSON' >> $GITHUB_ENV
+          cat flags.json >> $GITHUB_ENV
+          echo -e '\nEOFFLAGSJSON' >> $GITHUB_ENV
+          
+          if [ -f "bunnyshell.yaml" ]; then
+            echo 'BUNNYSHELL_YAML_CONTENTS<<EOFBNSYAML' >> $GITHUB_ENV
+            cat bunnyshell.yaml >> $GITHUB_ENV
+            echo -e '\nEOFBNSYAML' >> $GITHUB_ENV
+          fi
+          
+          echo "PR_NUMBER=$(jq -r '.issue.number // .number' event.json)" >> $GITHUB_ENV
+          
+          echo 'Environment definition (`bunnyshell.yaml`) loaded'
+          echo ':white_check_mark: Environment definition (`bunnyshell.yaml`) loaded' >> $GITHUB_STEP_SUMMARY
+          
+          echo "Deployment flags loaded"
+          echo ":white_check_mark: Deployment flags loaded" >> $GITHUB_STEP_SUMMARY
