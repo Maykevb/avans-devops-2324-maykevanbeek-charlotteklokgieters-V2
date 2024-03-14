@@ -12,7 +12,7 @@ jobs:
     name: Load artifact values
     uses: bunnyshell/workflows/.github/workflows/load-artifact.yaml@v2
     with:
-      workflow_run_id: ${{ github.event.workflow_run.id }} 
+      workflow_run_id: ${{ github.event.workflow_run.id }}
 
   deploy:
     name: Deploy Environment
