@@ -10,7 +10,7 @@ permissions:
 jobs:
   load-artifact-from-reusable:
     name: Load artifact values
-    uses: bunnyshell/workflows/.github/workflows/load-artifact.yaml
+    uses: bunnyshell/workflows/.github/workflows/load-artifact.yaml@v1
     with:
       workflow_run_id: ${{ github.event.workflow_run.id }}
 
