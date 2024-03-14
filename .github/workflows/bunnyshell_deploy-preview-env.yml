@@ -17,7 +17,7 @@ jobs:
   deploy:
     name: Deploy Environment
     needs: load-artifact-from-reusable
-    uses: bunnyshell/workflows/.github/workflows/deploy-env.yaml@v2
+    uses: bunnyshell/workflows/.github/workflows/deploy-env.yaml
     concurrency: bns-deploy-${{ needs.load-artifact-from-reusable.outputs.pr-number }}
     if: ${{ github.event.workflow_run.conclusion == 'success' && needs.load-artifact-from-reusable.outputs.skip-deployment == 'false' }}
     with:
