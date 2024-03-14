@@ -15,6 +15,7 @@ jobs:
       workflow_run_id: ${{ github.event.workflow_run.id }}
 
   deploy:
+    permissions: write-all
     name: Deploy Environment
     needs: load-artifact-from-reusable
     uses: bunnyshell/workflows/.github/workflows/deploy-env.yaml@v2
