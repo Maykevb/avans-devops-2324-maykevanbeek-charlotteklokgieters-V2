@@ -8,24 +8,24 @@ on:
 permissions:
   pull-requests: write
 jobs:
-  load-artifact-from-reusable:
-    name: Load artifact values
-    uses: bunnyshell/workflows/.github/workflows/load-artifact.yaml@v2
-    with:
-      workflow_run_id: ${{ github.event.workflow_run.id }}
-
-  deploy:
-    name: Deploy Environment
-    needs: load-artifact-from-reusable
-    uses: bunnyshell/workflows/.github/workflows/deploy-env.yaml@v2
-    concurrency: bns-deploy-${{ needs.load-artifact-from-reusable.outputs.pr-number }}
-    if: ${{ github.event.workflow_run.conclusion == 'success' && needs.load-artifact-from-reusable.outputs.skip-deployment == 'false' }}
-    with:
-      pr-number: ${{ needs.load-artifact-from-reusable.outputs.pr-number }}
-      project-id: "m1r05oOwg4"
-      cluster-id: "QmGEdYk30p"
-      env-name: "Demo PR #${{ needs.load-artifact-from-reusable.outputs.pr-number }}"
-      bunnyshell-yaml-contents: ${{ needs.load-artifact-from-reusable.outputs.bunnyshell-yaml-contents }}
-      comment-on-pr: true
-    secrets:
-      bunnyshell-access-token: ${{ secrets.BUNNYSHELL_PAT_TOKEN }}
+#  load-artifact-from-reusable:
+#    name: Load artifact values
+#    uses: bunnyshell/workflows/.github/workflows/load-artifact.yaml@v2
+#    with:
+#      workflow_run_id: ${{ github.event.workflow_run.id }}
+#
+#  deploy:
+#    name: Deploy Environment
+#    needs: load-artifact-from-reusable
+#    uses: bunnyshell/workflows/.github/workflows/deploy-env.yaml@v2
+#    concurrency: bns-deploy-${{ needs.load-artifact-from-reusable.outputs.pr-number }}
+#    if: ${{ github.event.workflow_run.conclusion == 'success' && needs.load-artifact-from-reusable.outputs.skip-deployment == 'false' }}
+#    with:
+#      pr-number: ${{ needs.load-artifact-from-reusable.outputs.pr-number }}
+#      project-id: "m1r05oOwg4"
+#      cluster-id: "QmGEdYk30p"
+#      env-name: "Demo PR #${{ needs.load-artifact-from-reusable.outputs.pr-number }}"
+#      bunnyshell-yaml-contents: ${{ needs.load-artifact-from-reusable.outputs.bunnyshell-yaml-contents }}
+#      comment-on-pr: true
+#    secrets:
+#      bunnyshell-access-token: ${{ secrets.BUNNYSHELL_PAT_TOKEN }}
