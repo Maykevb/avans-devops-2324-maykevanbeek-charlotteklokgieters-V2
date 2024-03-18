@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
 jobs:
   load-artifact-from-reusable:
-    name: Load artifact values
+    name: Load artifacts
     uses: bunnyshell/workflows/.github/workflows/load-artifact.yaml@v2
     with:
       workflow_run_id: ${{ github.event.workflow_run.id }}
