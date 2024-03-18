@@ -4,7 +4,7 @@ type: primary
 urlHandle: 227poy
 components:
   -
-    kind: Application
+    kind: Application 
     name: api
     gitRepo: 'https://github.com/Maykevb/avans-devops-2324-maykevanbeek-charlotteklokgieters-V2.git'
     gitBranch: master
