@@ -22,7 +22,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' && needs.load-artifact-from-reusable.outputs.skip-deployment == 'false' }}
     with:
       pr-number: ${{ needs.load-artifact-from-reusable.outputs.pr-number }}
-      project-id: "m1r05oOwg4"
+      project-id: "4vabZJOaAQ"
       cluster-id: "QmGEdYk30p"
       env-name: "Demo PR #${{ needs.load-artifact-from-reusable.outputs.pr-number }}"
       bunnyshell-yaml-contents: ${{ needs.load-artifact-from-reusable.outputs.bunnyshell-yaml-contents }}
