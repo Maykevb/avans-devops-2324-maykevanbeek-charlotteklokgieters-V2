@@ -25,10 +25,7 @@ jobs:
       project-id: "4vabZJOaAQ"
       cluster-id: "QmGEdYk30p"
       env-name: "Demo PR #${{ needs.load-artifact-from-reusable.outputs.pr-number }}"
-      bunnyshell-yaml-contents: "kind: Environment\nname: preview\ntype: primary\nurlHandle: 227poy\ncomponents:\n    - kind: Application\n      name: api\n      gitRepo: 'https://github.com/Maykevb/avans-devops-2324-maykevanbeek-charlotteklokgieters-V2.git'\n      gitBranch: master\n      gitApplicationPath: /\n      dockerCompose:\n          build:\n              context: .\n              dockerfile: Dockerfile-API\n          environment:\n              MONGO_URI: 'mongodb://root:root@mongodb:27017/devops_week1'\n          ports:\n              - '17000:3000'\n      hosts:\n          - hostname: 'api-{{ env.base_domain }}'\n        
-    path: /\n            servicePort: 17000\n    - kind: Service\n      name: messagebus\n      dockerCompose:\n          hostname: messagebus\n          image: 'rabbitmq:latest'\n          labels:\n    
-          NAME: messagebus\n          ports:\n              - '4369:4369'\n              - '5671:5671'\n              - '5672:5672'\n              - '25672:25672'\n      hosts:\n          - hostname: 'messagebus-{{ env.base_domain }}'\n            path: /\n            servicePort: 4369\n    - kind: Database\n      name: mongodb\n      gitRepo: 'https://github.com/Maykevb/avans-devops-2324-maykevanbeek-charlotteklokgieters-V2.git'\n      gitBranch: master\n      gitApplicationPath: /\n      dockerCompose:\n          build:\n              context: .\n              dockerfile: Dockerfile\n          environment:\n              MONGO_INITDB_ROOT_PASSWORD: root\n              MONGO_INITDB_ROOT_USERNAME: root\n          ports:\n              - '27017:27017'\n          restart: always\n      volumes:\n       
-   - name: mongodb-data\n            mount: /data/db\n            subPath: ''\nvolumes:\n    - name: mongodb-data\n      size: 1Gi\n      type: disk\n"
+      bunnyshell-yaml-contents: ${{ needs.load-artifact-from-reusable.outputs.bunnyshell-yaml-contents }}
       comment-on-pr: true
     secrets:
       bunnyshell-access-token: ${{secrets.BUNNYSHELL_PAT_TOKEN}}
