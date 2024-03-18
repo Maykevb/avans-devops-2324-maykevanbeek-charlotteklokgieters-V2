@@ -1,5 +1,5 @@
 kind: Environment
-name: prod1
+name: preview
 type: primary
 urlHandle: 227poy
 components:
