@@ -1,7 +1,7 @@
 kind: Environment
-name: preview
+name: prod1
 type: primary
-urlHandle: xcio2u
+urlHandle: 227poy
 components:
   -
     kind: Application
@@ -22,6 +22,24 @@ components:
         hostname: 'api-{{ env.base_domain }}'
         path: /
         servicePort: 17000
+  -
+    kind: Service
+    name: messagebus
+    dockerCompose:
+      hostname: messagebus
+      image: 'rabbitmq:latest'
+      labels:
+        NAME: messagebus
+      ports:
+        - '4369:4369'
+        - '5671:5671'
+        - '5672:5672'
+        - '25672:25672'
+    hosts:
+      -
+        hostname: 'messagebus-{{ env.base_domain }}'
+        path: /
+        servicePort: 4369
   -
     kind: Database
     name: mongodb
