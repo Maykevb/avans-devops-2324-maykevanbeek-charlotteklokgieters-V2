@@ -24,7 +24,7 @@ jobs:
       pr-number: ${{ needs.load-artifact-from-reusable.outputs.pr-number }}
       project-id: "4vabZJOaAQ"
       cluster-id: "QmGEdYk30p"
-      env-name: "PR 20"
+      env-name: "Demo PR #${{ needs.load-artifact-from-reusable.outputs.pr-number }}"
       bunnyshell-yaml-contents: ${{ needs.load-artifact-from-reusable.outputs.bunnyshell-yaml-contents }}
       comment-on-pr: true
     secrets:
