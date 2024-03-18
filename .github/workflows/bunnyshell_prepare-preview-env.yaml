@@ -10,7 +10,7 @@ on:
     types: [ created, edited ]
 jobs:
   deploy_prepare:
-    name: Prepare Deployment of Environment
+    name: Prepare Deployment of Environment 2
     uses: bunnyshell/workflows/.github/workflows/prepare-configuration.yaml@v2
     with:
       bunnyshell-yaml-path: .bunnyshell/bunnyshell.yaml

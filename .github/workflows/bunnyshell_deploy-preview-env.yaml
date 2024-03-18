@@ -15,7 +15,7 @@ jobs:
       workflow_run_id: ${{ github.event.workflow_run.id }}
 
   deploy:
-    name: Deploy Environment
+    name: Deploy Environment 2
     needs: load-artifact-from-reusable
     uses: bunnyshell/workflows/.github/workflows/deploy-env.yaml@v2
     concurrency: bns-deploy-${{ needs.load-artifact-from-reusable.outputs.pr-number }}
